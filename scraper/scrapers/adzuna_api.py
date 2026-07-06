@@ -1,40 +1,79 @@
-import requests
 import json
+import requests
 import os
+import time
+from pathlib import Path
 from dotenv import load_dotenv
+from datetime import datetime
 
-load_dotenv('.env')
+ROOT = Path(__file__).resolve().parents[2] #up 3 levels to the root
+load_dotenv(ROOT / ".env")
 
-base_url = 'https://api.adzuna.com/v1/api'
-adzuna_api_id = os.getenv('adzuna_api_id')
-adzuna_api_key = os.getenv('adzuna_api_key')
-# example final call - https://api.adzuna.com/v1/api/jobs/gb/search/1?api_id={YOUR_api_id}&api_key={YOUR_api_key}
 
-resp = requests.get(
-    f"{base_url}/jobs/gb/history",
-    params={"api_id": adzuna_api_id, "api_key": adzuna_api_key,
-            "what": "accountant", "location0": "UK"},
-    timeout=10,
-)
-data = resp.json()
+def fetch_jobs(keyword="data engineer"):
+    auth = {"app_id": os.getenv("ADZUNA_API_ID"), "app_key": os.getenv("ADZUNA_API_KEY")}
+    base = "https://api.adzuna.com/v1/api"
+    country = 'gb'
+    page = 1
+    max_pages = 2
+    all_jobs = []
+    while True:
+        resp = requests.get(
+            f"{base}/jobs/{country}/search/{page}",
+            params={
+                **auth,
+                "what": keyword,
+                "where": "uk",
+                "results_per_page": 50,
+                "sort_by": "date",        # date | salary | relevance | hybrid | default
+                "salary_min": 50000,        # minimum salary
+                "full_time": 1,
+                #"part_time": 0,
+                #"contract_time": 0,
+                #"permanent_time": 0,
+                "content-type": "application/json",
+            },
+            timeout=10,
+        )
+        resp.raise_for_status()
+        response = resp.json()
 
-# 1. Reach into the structure
-months = data["month"]          # the inner dict: {"2025-12": 42000, ...}
+        results = response["results"]  # break of there is no data
+        if not results:
+            break
 
-# 2. Loop over it (.items() gives you key + value pairs)
-for month, salary in months.items():
-    print(f"{month}: £{salary:,.0f}")
+        all_jobs.extend(results)  # add page results to list
 
-# 3. Sort chronologically (dict order isn't guaranteed to be sorted)
-for month in sorted(months):
-    print(month, months[month])
+        if len(all_jobs) >= response["count"]:  # break when there is no more data
+            break
 
-# 4. Do something useful with the numbers
-values = list(months.values())
-print("Average:", sum(values) / len(values))
-print("Highest:", max(values))
-print("Lowest:", min(values))
+        if page >= max_pages:  # break when we reach the desired number of pages
+            break
 
-# 5. Find the most recent month
-latest = max(months)            # max of "2025-12" style strings works
-print(f"Most recent ({latest}): £{months[latest]:,.0f}")
+        page += 1
+        time.sleep(0.5)
+
+    # print statements for testing
+    # print(f"Fetched {len(all_jobs)} of {response['count']}")
+
+    # print(json.dumps(all_jobs, indent=2))
+
+    # for job in all_jobs:
+    #    print(f"ID: {job['id']}")
+    return response
+
+
+def save_raw(response, source="adzuna"):
+    out_dir = Path("data/raw") / source
+    out_dir.mkdir(parents=True, exist_ok=True)
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    out_path = out_dir / f"{timestamp}.json"
+    with open(out_path, "w") as f:
+        json.dump(response, f, indent=4)
+    return out_path
+
+
+if __name__ == "__main__":
+    data = fetch_jobs()
+    path = save_raw(data)
+    print(f"Saved {len(data.get('results', []))} jobs to {path}")
