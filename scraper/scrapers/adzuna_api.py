@@ -1,29 +1,66 @@
-import requests
 import json
+import requests
 import os
-from datetime import datetime
+import time
 from pathlib import Path
 from dotenv import load_dotenv
+from datetime import datetime
 
-load_dotenv()
-
-ADZUNA_APP_ID = os.getenv("ADZUNA_APP_ID")
-ADZUNA_APP_KEY = os.getenv("ADZUNA_APP_KEY")
-#  https://api.adzuna.com/v1/api/jobs/gb/search/1?app_id={YOUR_APP_ID}&app_key={YOUR_APP_KEY}
+ROOT = Path(__file__).resolve().parents[2] #up 3 levels to the root
+load_dotenv(ROOT / ".env")
 
 
-def fetch_jobs(keyword="data engineer", page=1):
-    url = f"https://api.adzuna.com/v1/api/jobs/gb/search/{page}"
-    params = {
-        "app_id": ADZUNA_APP_ID,
-        "app_key": ADZUNA_APP_KEY,
-        "what": keyword,
-        "results_per_page": 1,
-        "content-type": "application/json",
-    }
-    response = requests.get(url, params=params)
-    response.raise_for_status()
-    return response.json()
+def fetch_jobs(keyword="data engineer"):
+    auth = {"app_id": os.getenv("ADZUNA_API_ID"), "app_key": os.getenv("ADZUNA_API_KEY")}
+    base = "https://api.adzuna.com/v1/api"
+    country = 'gb'
+    page = 1
+    max_pages = 2
+    all_jobs = []
+    while True:
+        resp = requests.get(
+            f"{base}/jobs/{country}/search/{page}",
+            params={
+                **auth,
+                "what": keyword,
+                "where": "uk",
+                "results_per_page": 50,
+                "sort_by": "date",        # date | salary | relevance | hybrid | default
+                "salary_min": 50000,        # minimum salary
+                "full_time": 1,
+                #"part_time": 0,
+                #"contract_time": 0,
+                #"permanent_time": 0,
+                "content-type": "application/json",
+            },
+            timeout=10,
+        )
+        resp.raise_for_status()
+        response = resp.json()
+
+        results = response["results"]  # break of there is no data
+        if not results:
+            break
+
+        all_jobs.extend(results)  # add page results to list
+
+        if len(all_jobs) >= response["count"]:  # break when there is no more data
+            break
+
+        if page >= max_pages:  # break when we reach the desired number of pages
+            break
+
+        page += 1
+        time.sleep(0.5)
+
+    # print statements for testing
+    # print(f"Fetched {len(all_jobs)} of {response['count']}")
+
+    # print(json.dumps(all_jobs, indent=2))
+
+    # for job in all_jobs:
+    #    print(f"ID: {job['id']}")
+    return response
 
 
 def save_raw(response, source="adzuna"):
@@ -32,24 +69,11 @@ def save_raw(response, source="adzuna"):
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     out_path = out_dir / f"{timestamp}.json"
     with open(out_path, "w") as f:
-        json.dump(response, f, indent=2)
+        json.dump(response, f, indent=4)
     return out_path
 
 
 if __name__ == "__main__":
-    all_jobs = []              # accumulator list
-    page = 1
-    max_pages = 1
-
-    while page <= max_pages:   # note: <= so you include page 5, and : at end
-        data = fetch_jobs(page=page)
-        results = data.get("results", [])
-        if not results:        # stop early if API returns nothing
-            break
-        all_jobs.extend(results)  # .extend merges lists, .append would nest them
-        print(f"Page {page}: got {len(results)} jobs")
-        page += 1              # don't forget to increment!
-
-    # 3. Save everything once
-    path = save_raw({"results": all_jobs})
-    print(f"Saved {len(all_jobs)} total jobs to {path}")
+    data = fetch_jobs()
+    path = save_raw(data)
+    print(f"Saved {len(data.get('results', []))} jobs to {path}")
