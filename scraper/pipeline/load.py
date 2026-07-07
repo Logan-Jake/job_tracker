@@ -4,10 +4,10 @@ from db.config import load_config
 
 def insert_adzuna_jobs(job_data):
 
-    sql = "INSERT INTO vendors(id, title, description, company_name, salary_min, salary_max, salary_is_predicted,"
+    sql = ("INSERT INTO vendors(id, title, description, company_name, salary_min, salary_max, salary_is_predicted,"
     "contract_time, category_tag, category_label, latitude, longitude, location_display, location_area, redirect_url,"
-    ("adref, created, inserted_at) "
-     "VALUES(%s) RETURNING *")
+    "adref, created, inserted_at) "
+     "VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)")
     config = load_config()
     try:
         with psycopg2.connect(**config) as conn:
