@@ -21,5 +21,16 @@ def clean_latest():
               'contract_type', 'contract_time', 'category.tag', 'category.label', 'latitude', 'longitude',
               'location.display_name', 'location.area', 'redirect_url', 'adref', 'created']])
 
+    df = df.rename(columns={
+        'company.display_name': 'company_name',
+        'category.tag': 'category_tag',
+        'category.label': 'category_label',
+        'location.display_name': 'location_display',
+        'location.area': 'location_area',
+    })
     df = df.where(df.notna(), None)
     return df
+
+
+if __name__ == "__main__":
+    clean_latest()

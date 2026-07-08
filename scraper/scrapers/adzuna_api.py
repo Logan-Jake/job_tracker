@@ -15,7 +15,7 @@ def fetch_jobs(keyword="data engineer"):
     base = "https://api.adzuna.com/v1/api"
     country = 'gb'
     page = 1
-    max_pages = 2
+    max_pages = 10
     all_jobs = []
     while True:
         resp = requests.get(
@@ -50,11 +50,13 @@ def fetch_jobs(keyword="data engineer"):
         if page >= max_pages:  # break when we reach the desired number of pages
             break
 
+        print(f"Fetched {len(results)} of {response['count']} for page# {page}")
+
         page += 1
         time.sleep(0.5)
 
     # print statements for testing
-    # print(f"Fetched {len(all_jobs)} of {response['count']}")
+    print(f"Fetched {len(all_jobs)} of {response['count']}")
 
     # print(json.dumps(all_jobs, indent=2))
 
@@ -70,6 +72,7 @@ def save_raw(response, source="adzuna"):
     out_path = out_dir / f"{timestamp}.json"
     with open(out_path, "w") as f:
         json.dump(response, f, indent=4)
+    print(f"Output file path: {out_path}")
     return out_path
 
 
