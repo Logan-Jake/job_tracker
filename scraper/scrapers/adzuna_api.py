@@ -6,7 +6,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 from datetime import datetime
 
-ROOT = Path(__file__).resolve().parents[2] #up 3 levels to the root
+ROOT = Path(__file__).resolve().parents[2]  # up 3 levels to the root
 load_dotenv(ROOT / ".env")
 
 
@@ -28,9 +28,9 @@ def fetch_jobs(keyword="data engineer"):
                 "sort_by": "date",        # date | salary | relevance | hybrid | default
                 "salary_min": 50000,        # minimum salary
                 "full_time": 1,
-                #"part_time": 0,
-                #"contract_time": 0,
-                #"permanent_time": 0,
+                # "part_time": 0,
+                # "contract_time": 0,
+                # "permanent_time": 0,
                 "content-type": "application/json",
             },
             timeout=10,
@@ -55,13 +55,10 @@ def fetch_jobs(keyword="data engineer"):
         page += 1
         time.sleep(0.5)
 
-    # print statements for testing
     print(f"Fetched {len(all_jobs)} of {response['count']}")
-
     # print(json.dumps(all_jobs, indent=2))
 
-    # for job in all_jobs:
-    #    print(f"ID: {job['id']}")
+    response["results"] = all_jobs
     return response
 
 
