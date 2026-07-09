@@ -10,12 +10,12 @@ ROOT = Path(__file__).resolve().parents[2]  # up 3 levels to the root
 load_dotenv(ROOT / ".env")
 
 
-def fetch_jobs(keyword="data engineer"):
+def fetch_jobs(keyword="data engineer", num_jobs_to_fetch=100):
     auth = {"app_id": os.getenv("ADZUNA_API_ID"), "app_key": os.getenv("ADZUNA_API_KEY")}
     base = "https://api.adzuna.com/v1/api"
     country = 'gb'
     page = 1
-    max_pages = 10
+    max_pages = num_jobs_to_fetch / 50
     all_jobs = []
     while True:
         resp = requests.get(

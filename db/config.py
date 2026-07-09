@@ -1,11 +1,12 @@
 from configparser import ConfigParser
-
+from pathlib import Path
 # this file loads the db connection details from database.ini
 
 
 def load_config(filename='database.ini', section='postgresql'):
+    filepath = Path(__file__).resolve().parent / filename
     parser = ConfigParser()
-    parser.read(filename)
+    parser.read(filepath)
 
     config = {}
     if parser.has_section(section):

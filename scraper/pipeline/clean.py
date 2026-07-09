@@ -18,17 +18,16 @@ def clean_latest():
 
     # print(df.columns.tolist())
     df = (df[['id', 'title', 'description', 'company.display_name', 'salary_min', 'salary_max', 'salary_is_predicted',
-              'contract_type', 'contract_time', 'category.tag', 'category.label', 'latitude', 'longitude',
+              'contract_type', 'contract_time', 'category.label', 'latitude', 'longitude',
               'location.display_name', 'location.area', 'redirect_url', 'adref', 'created']])
 
     df = df.rename(columns={
         'company.display_name': 'company_name',
-        'category.tag': 'category_tag',
         'category.label': 'category_label',
         'location.display_name': 'location_display',
         'location.area': 'location_area',
     })
-    df = df.where(df.notna(), None)
+    df = df.astype(object).where(df.notna(), None)  # without astype(object) pandas converts None back to NaN
     return df
 
 
