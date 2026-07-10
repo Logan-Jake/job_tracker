@@ -4,7 +4,7 @@ from scrapers.adzuna_api import fetch_jobs, save_raw
 
 
 def fetch_adzuna():
-    data = fetch_jobs(keyword="data engineer", num_jobs_to_fetch=5000)
+    data = fetch_jobs(keyword="data analyst", num_jobs_to_fetch=5000)
     path = save_raw(data)
     print(f"Saved {len(data.get('results', []))} jobs to {path}")
 

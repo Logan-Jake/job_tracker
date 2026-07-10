@@ -10,7 +10,7 @@ ROOT = Path(__file__).resolve().parents[2]  # up 3 levels to the root
 load_dotenv(ROOT / ".env")
 
 
-def fetch_jobs(keyword="data engineer", num_jobs_to_fetch=100):
+def fetch_jobs(keyword, num_jobs_to_fetch):
     auth = {"app_id": os.getenv("ADZUNA_API_ID"), "app_key": os.getenv("ADZUNA_API_KEY")}
     base = "https://api.adzuna.com/v1/api"
     country = 'gb'
