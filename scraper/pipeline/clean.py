@@ -28,6 +28,8 @@ def clean_latest():
         'location.area': 'location_area',
     })
     df = df.astype(object).where(df.notna(), None)  # without astype(object) pandas converts None back to NaN
+    print(f"File Used For Clean: {latest}")
+    print(f"Rows Cleaned: {len(df.index)}")
     return df
 
 

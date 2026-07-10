@@ -63,7 +63,7 @@ def fetch_jobs(keyword="data engineer", num_jobs_to_fetch=100):
 
 
 def save_raw(response, source="adzuna"):
-    out_dir = Path("data/raw") / source
+    out_dir = Path("scrapers/data/raw") / source
     out_dir.mkdir(parents=True, exist_ok=True)
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     out_path = out_dir / f"{timestamp}.json"

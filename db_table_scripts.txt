@@ -29,7 +29,6 @@
         salary_is_predicted BOOLEAN,
         contract_type       TEXT,
         contract_time       TEXT,
-        category_tag        TEXT,
         category_label      TEXT,
         latitude            NUMERIC(9,6),
         longitude           NUMERIC(9,6),

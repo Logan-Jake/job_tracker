@@ -2,7 +2,7 @@ from pipeline.clean import clean_latest
 from pipeline.load import insert_adzuna_jobs
 
 
-def main():
+def clean_and_load_adzuna():
     df = clean_latest()
     records = list(df.itertuples(index=False, name=None))
     insert_adzuna_jobs(records)
@@ -10,4 +10,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    clean_and_load_adzuna()
