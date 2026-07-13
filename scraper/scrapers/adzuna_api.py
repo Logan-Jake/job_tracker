@@ -74,6 +74,6 @@ def save_raw(response, source="adzuna"):
 
 
 if __name__ == "__main__":
-    data = fetch_jobs()
+    data = fetch_jobs(keyword="data engineer", num_jobs_to_fetch=5000)
     path = save_raw(data)
     print(f"Saved {len(data.get('results', []))} jobs to {path}")

@@ -1,4 +1,6 @@
 # UK Data Engineering Job Market Tracker
+(This is the end goal not the current project state)
+
 
 A self-hosted data pipeline that tracks the UK data engineering job market over time — listing volume, in-demand skills, and salary trends — by collecting job postings daily, normalizing the data, and storing it in PostgreSQL for analysis.
 
@@ -37,17 +39,17 @@ Everything runs as Docker containers on a `docker-compose` network. A Cloudflare
 
 ## Tech stack
 
-| Layer | Tools                                 |
-|---|---------------------------------------|
-| Language | Python 3.13                           |
-| Data collection | Adzuna API, Reed API, `requests`      |
-| Validation | Pydantic                              |
-| Database | PostgreSQL 16                         |
-| DB access / migrations | SQLAlchemy, Alembic                   |
-| Scheduling | supercronic (in-container cron)       |
-| Containerization | Docker, Docker Compose                |
-| Remote access | Cloudflare Tunnel + Cloudflare Access |
-| Dashboard | Gafana                                |
+| Layer                  | Tools                                 |
+|------------------------|---------------------------------------|
+| Language               | Python 3.13                           |
+| Data collection        | Adzuna API, Reed API, `requests`      |
+| Validation             | Pydantic                              |
+| Database               | PostgreSQL 18                         |
+| DB access / migrations | SQLAlchemy                  |
+| Scheduling             | supercronic (in-container cron)       |
+| Containerisation       | Docker, Docker Compose                |
+| Remote access          | Cloudflare Tunnel + Cloudflare Access |
+| Dashboard              | Gafana                                |
 
 ## What's in the database
 
@@ -118,7 +120,9 @@ jobpipeline/
 - **Why track `is_active` instead of just inserting rows:** treating "still listed" as a tracked state (rather than re-scraping from scratch) is what makes duration/longevity analysis possible
 
 ## Roadmap
-
+- [x] Adzuna API fetch & save to json file
+- [ ] Clean adzuna
+- [ ]
 - [ ] Grafana dashboard for listings, salary, and skill trends
 - [ ] Additional job sources beyond Adzuna/Reed
 - [ ] Time-to-fill analysis (days between first seen and delisted)

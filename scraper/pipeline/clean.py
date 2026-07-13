@@ -6,11 +6,8 @@ pd.set_option('display.max_columns', None)
 pd.set_option('display.width', None)
 
 
-def clean_latest():
-    folder = Path(__file__).resolve().parent / "../scrapers/data/raw/adzuna"
-    latest = max(folder.glob("*.json"))
-
-    with open(latest) as f:
+def clean_latest(raw_path):
+    with open(raw_path) as f:
         data = json.load(f)
 
     df = pd.json_normalize(data["results"])
@@ -28,7 +25,7 @@ def clean_latest():
         'location.area': 'location_area',
     })
     df = df.astype(object).where(df.notna(), None)  # without astype(object) pandas converts None back to NaN
-    print(f"File Used For Clean: {latest}")
+    print(f"File Used For Clean: {raw_path}")
     print(f"Rows Cleaned: {len(df.index)}")
     return df
 
