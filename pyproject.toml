@@ -1,0 +1,14 @@
+[project]
+name = "job_tracker"
+version = "0.1.0"
+dependencies = [
+    "psycopg2-binary",
+    "requests",
+    "pandas",
+    "python-dotenv",
+    "numpy",
+]
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.backends._legacy:_Backend"
