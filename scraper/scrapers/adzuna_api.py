@@ -5,6 +5,8 @@ import time
 from pathlib import Path
 from dotenv import load_dotenv
 from datetime import datetime
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 
 ROOT = Path(__file__).resolve().parents[2]  # up 3 levels to the root
 load_dotenv(ROOT / ".env")
@@ -17,8 +19,17 @@ def fetch_jobs(keyword, num_jobs_to_fetch):
     page = 1
     max_pages = num_jobs_to_fetch / 50
     all_jobs = []
+
+    session = requests.Session()
+    retry = Retry(
+        total=3,
+        backoff_factor=2,
+        status_forcelist=[429, 500, 502, 503, 504],
+    )
+    session.mount("https://", HTTPAdapter(max_retries=retry))
+
     while True:
-        resp = requests.get(
+        resp = session.get(
             f"{base}/jobs/{country}/search/{page}",
             params={
                 **auth,
