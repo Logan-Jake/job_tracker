@@ -49,7 +49,7 @@ Everything runs as Docker containers on a `docker-compose` network. A Cloudflare
 | Scheduling             | supercronic (in-container cron)       |
 | Containerisation       | Docker, Docker Compose                |
 | Remote access          | Cloudflare Tunnel + Cloudflare Access |
-| Dashboard              | Gafana                                |
+| Dashboard              | Grafana                                |
 
 ## What's in the database
 
