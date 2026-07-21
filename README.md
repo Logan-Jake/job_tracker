@@ -121,12 +121,11 @@ jobpipeline/
 
 ## Roadmap
 - [x] Adzuna API fetch & save to json file
-- [ ] Clean adzuna
-- [ ]
-- [ ] Grafana dashboard for listings, salary, and skill trends
-- [ ] Additional job sources beyond Adzuna/Reed
-- [ ] Time-to-fill analysis (days between first seen and delisted)
-- [ ] Salary-by-skill correlation analysis
+- [x] Clean adzuna
+- [x] Grafana dashboard for listings, salary, and skill trends
+- [ ] Additional job sources beyond Adzuna - Reed, Indeed, LinkedIn
+- [ ] Time to fill analysis (days between first seen and delisted)
+- [ ] Salary by skill correlation analysis
 
 ## License
 
