@@ -2,9 +2,11 @@ services:
   job_tracker:
     build:
       context: .
-      dockerfile: scraper/Dockerfile
+      dockerfile: Dockerfile
     environment:
         DATABASE_URL: postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}  # postgresql+psycopg2://USER:PASSWORD@HOST:PORT/DBNAME
+        ADZUNA_API_ID: ${ADZUNA_API_ID}
+        ADZUNA_API_KEY: ${ADZUNA_API_KEY}
     depends_on:
       db:
         condition: service_healthy
