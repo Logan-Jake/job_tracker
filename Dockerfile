@@ -6,6 +6,7 @@ COPY pyproject.toml /job_tracker/
 
 RUN pip install --no-cache-dir .
 
+COPY alembic.ini /job_tracker/
 COPY db/ /job_tracker/db/
 COPY scraper/ /job_tracker/scraper/
 
