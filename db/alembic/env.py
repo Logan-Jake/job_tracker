@@ -12,11 +12,12 @@ from db.models import Base
 # access to the values within the .ini file in use.
 config = context.config
 
-_cfg = configparser.ConfigParser()
-_cfg.read("db/database.ini")
-_pg = _cfg["postgresql"]
-url = f"postgresql+psycopg2://{_pg['user']}:{_pg['password']}@{_pg['host']}/{_pg['database']}"
+import os
+url = os.environ["DATABASE_URL"]
 config.set_main_option("sqlalchemy.url", url)
+
+if config.config_file_name is not None:
+    fileConfig(config.config_file_name)
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
