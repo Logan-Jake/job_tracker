@@ -47,8 +47,8 @@ services:
       - "3001:3000"    # 3001 on host — native Grafana may still be on 3000
     volumes:
       - grafana:/var/lib/grafana
-      - ./grafana/provisioning:/etc/grafana/provisioning # TODO: add YAML file specifying type postgres, the host (db:5432), db name, user, password
-      - ./grafana/dashboards:/var/lib/grafana/dashboards # TODO: add YAML file that points at a folder path inside the container, which has the dashboard JSON.
+      - ./grafana/provisioning:/etc/grafana/provisioning
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
     environment:
       environment:
         GF_AUTH_ANONYMOUS_ENABLED: "true"
