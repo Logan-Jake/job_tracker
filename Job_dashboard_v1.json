@@ -1,0 +1,2757 @@
+{
+  "apiVersion": "dashboard.grafana.app/v2",
+  "kind": "Dashboard",
+  "metadata": {
+    "name": "adzuna-jobs-dashboard-1",
+    "namespace": "default",
+    "uid": "87b85ccd-072f-4ba4-8858-658f1b892223",
+    "resourceVersion": "1785134941950005",
+    "generation": 39,
+    "creationTimestamp": "2026-07-17T07:35:16Z",
+    "labels": {
+      "grafana.app/deprecatedInternalID": "1861269539336192"
+    },
+    "annotations": {
+      "grafana.app/createdBy": "user:ffs9j856mrxfke",
+      "grafana.app/folder": "",
+      "grafana.app/saved-from-ui": "Grafana v13.1.0 (b309c9bb3b)",
+      "grafana.app/updatedBy": "user:ffs9j856mrxfke",
+      "grafana.app/updatedTimestamp": "2026-07-27T06:49:01Z"
+    }
+  },
+  "spec": {
+    "annotations": [
+      {
+        "kind": "AnnotationQuery",
+        "spec": {
+          "query": {
+            "kind": "DataQuery",
+            "group": "grafana",
+            "version": "v0",
+            "datasource": {
+              "name": "-- Grafana --"
+            },
+            "spec": {}
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "builtIn": true
+        }
+      }
+    ],
+    "cursorSync": "Crosshair",
+    "description": "Interactive dashboard for analysing 4000+ job listings — salaries, categories, geography, trends, and more.",
+    "editable": false,
+    "elements": {
+      "panel-11": {
+        "kind": "Panel",
+        "spec": {
+          "id": 11,
+          "title": "Jobs Posted Over Time",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-postgresql-datasource",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "afscz4el7e8zkf"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "format": "time_series",
+                        "rawQuery": true,
+                        "rawSql": "SELECT DATE_TRUNC('day', inserted_at) AS time, COUNT(*) AS jobs_posted \r\nFROM adzuna_jobs \r\nWHERE inserted_at IS NOT NULL \r\n  AND category_label IN (${category:sqlstring}) \r\n  AND COALESCE(contract_type, 'Not specified') IN (${contract_type:sqlstring}) \r\n  AND COALESCE(contract_time, 'Not specified') IN (${contract_time:sqlstring}) \r\n  AND location_display IN (${location:sqlstring}) \r\n  AND COALESCE(company_name, 'Not specified') IN (${company:sqlstring}) \r\n  AND (salary_min IS NULL OR salary_min >= ${salary_min_filter}::numeric) \r\n  AND (salary_max IS NULL OR salary_max <= ${salary_max_filter}::numeric) \r\n  AND $__timeFilter(inserted_at) \r\n  AND inserted_at >= '2026-07-14'\r\nGROUP BY 1 ORDER BY 1;",
+                        "sql": {
+                          "columns": [
+                            {
+                              "parameters": [],
+                              "type": "function"
+                            }
+                          ],
+                          "groupBy": [
+                            {
+                              "property": {
+                                "type": "string"
+                              },
+                              "type": "groupBy"
+                            }
+                          ],
+                          "limit": 50
+                        }
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "timeseries",
+            "version": "13.1.0",
+            "spec": {
+              "options": {
+                "annotations": {
+                  "clustering": -1,
+                  "multiLane": false
+                },
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "enableFacetedFilter": false,
+                  "overflow": "ellipsis",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "multi",
+                  "sort": "none"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      },
+                      {
+                        "value": 80,
+                        "color": "red"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "barWidthFactor": 0.6,
+                    "drawStyle": "line",
+                    "fillOpacity": 17,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "insertNulls": false,
+                    "lineInterpolation": "smooth",
+                    "lineStyle": {
+                      "fill": "solid"
+                    },
+                    "lineWidth": 4,
+                    "pointSize": 10,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "showPoints": "auto",
+                    "showValues": false,
+                    "spanNulls": true,
+                    "stacking": {
+                      "group": "A",
+                      "mode": "none"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "off"
+                    }
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-12": {
+        "kind": "Panel",
+        "spec": {
+          "id": 12,
+          "title": "Contract Type Breakdown",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-postgresql-datasource",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "afscz4el7e8zkf"
+                      },
+                      "spec": {
+                        "format": "table",
+                        "rawSql": "SELECT COALESCE(contract_type, 'Unknown') AS contract_type, COUNT(*) AS count FROM adzuna_jobs WHERE category_label IN (${category:sqlstring}) AND contract_time IN (${contract_time:sqlstring}) AND location_display IN (${location:sqlstring}) AND company_name IN (${company:sqlstring}) AND COALESCE(salary_min, 0) >= ${salary_min_filter}::numeric AND COALESCE(salary_max, 999999999) <= ${salary_max_filter}::numeric GROUP BY 1 ORDER BY 2 DESC;"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "piechart",
+            "version": "13.1.0",
+            "spec": {
+              "options": {
+                "displayLabels": [
+                  "percent"
+                ],
+                "legend": {
+                  "displayMode": "list",
+                  "overflow": "ellipsis",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "pieType": "donut",
+                "reduceOptions": {
+                  "calcs": [],
+                  "fields": "",
+                  "values": true
+                },
+                "sort": "desc",
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "single",
+                  "sort": "none"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "palette-classic",
+                    "fixedColor": "#73BF69"
+                  },
+                  "custom": {
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    }
+                  }
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "Unknown"
+                    },
+                    "properties": [
+                      {
+                        "id": "color",
+                        "value": {
+                          "fixedColor": "red",
+                          "mode": "fixed"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "permanent"
+                    },
+                    "properties": [
+                      {
+                        "id": "color",
+                        "value": {
+                          "fixedColor": "green",
+                          "mode": "fixed"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "contract"
+                    },
+                    "properties": [
+                      {
+                        "id": "color",
+                        "value": {
+                          "fixedColor": "semi-dark-orange",
+                          "mode": "fixed"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "panel-2": {
+        "kind": "Panel",
+        "spec": {
+          "id": 2,
+          "title": "Total Jobs",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-postgresql-datasource",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "afscz4el7e8zkf"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "format": "table",
+                        "rawQuery": true,
+                        "rawSql": "SELECT COUNT(*) AS total_jobs FROM adzuna_jobs \r\nWHERE \r\n  category_label IN (${category:sqlstring})\r\n  AND COALESCE(contract_type, 'Not specified') IN (${contract_type:sqlstring})\r\n  AND COALESCE(contract_time, 'Not specified') IN (${contract_time:sqlstring})\r\n  AND location_display IN (${location:sqlstring})\r\n  AND COALESCE(company_name, 'Not specified') IN (${company:sqlstring})\r\n  AND (salary_min IS NULL OR salary_min >= ${salary_min_filter}::numeric)\r\n  AND (salary_max IS NULL OR salary_max <= ${salary_max_filter}::numeric);",
+                        "sql": {
+                          "columns": [
+                            {
+                              "parameters": [],
+                              "type": "function"
+                            }
+                          ],
+                          "groupBy": [
+                            {
+                              "property": {
+                                "type": "string"
+                              },
+                              "type": "groupBy"
+                            }
+                          ],
+                          "limit": 50
+                        }
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "stat",
+            "version": "13.1.0",
+            "spec": {
+              "options": {
+                "colorMode": "background",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "percentChangeColorMode": "standard",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "showPercentChange": false,
+                "textMode": "auto",
+                "wideLayout": true
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "blue"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "fixed",
+                    "fixedColor": "blue"
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-21": {
+        "kind": "Panel",
+        "spec": {
+          "id": 21,
+          "title": "Jobs by Category",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-postgresql-datasource",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "afscz4el7e8zkf"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "format": "table",
+                        "rawQuery": true,
+                        "rawSql": "SELECT COALESCE(category_label, 'Uncategorised') AS category, COUNT(*) AS jobs \r\nFROM adzuna_jobs \r\nWHERE category_label IN (${category:sqlstring}) \r\n  AND COALESCE(contract_type, 'Not specified') IN (${contract_type:sqlstring}) \r\n  AND COALESCE(contract_time, 'Not specified') IN (${contract_time:sqlstring}) \r\n  AND location_display IN (${location:sqlstring}) \r\n  AND COALESCE(company_name, 'Not specified') IN (${company:sqlstring}) \r\n  AND (salary_min IS NULL OR salary_min >= ${salary_min_filter}::numeric) \r\n  AND (salary_max IS NULL OR salary_max <= ${salary_max_filter}::numeric) \r\nGROUP BY 1 ORDER BY 2 DESC LIMIT 30;",
+                        "sql": {
+                          "columns": [
+                            {
+                              "parameters": [],
+                              "type": "function"
+                            }
+                          ],
+                          "groupBy": [
+                            {
+                              "property": {
+                                "type": "string"
+                              },
+                              "type": "groupBy"
+                            }
+                          ],
+                          "limit": 50
+                        }
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "barchart",
+            "version": "13.1.0",
+            "spec": {
+              "options": {
+                "barRadius": 0.1,
+                "barWidth": 0.93,
+                "fullHighlight": false,
+                "groupWidth": 0.8,
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "overflow": "ellipsis",
+                  "placement": "right",
+                  "showLegend": true
+                },
+                "orientation": "vertical",
+                "showValue": "never",
+                "stacking": "none",
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "single",
+                  "sort": "none"
+                },
+                "xField": "category",
+                "xTickLabelRotation": -30,
+                "xTickLabelSpacing": 100
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      },
+                      {
+                        "value": 80,
+                        "color": "red"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "fillOpacity": 100,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "lineWidth": 0,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "off"
+                    }
+                  }
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "jobs"
+                    },
+                    "properties": [
+                      {
+                        "id": "color",
+                        "value": {
+                          "fixedColor": "dark-green",
+                          "mode": "fixed"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "panel-22": {
+        "kind": "Panel",
+        "spec": {
+          "id": 22,
+          "title": "Top 20 Companies by Job Count",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-postgresql-datasource",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "afscz4el7e8zkf"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "format": "table",
+                        "rawQuery": true,
+                        "rawSql": "SELECT company_name AS company, COUNT(*) AS jobs \r\nFROM adzuna_jobs \r\nWHERE company_name IS NOT NULL \r\n  AND category_label IN (${category:sqlstring}) \r\n  AND COALESCE(contract_type, 'Not specified') IN (${contract_type:sqlstring}) \r\n  AND COALESCE(contract_time, 'Not specified') IN (${contract_time:sqlstring}) \r\n  AND location_display IN (${location:sqlstring}) \r\n  AND COALESCE(company_name, 'Not specified') IN (${company:sqlstring}) \r\n  AND (salary_min IS NULL OR salary_min >= ${salary_min_filter}::numeric) \r\n  AND (salary_max IS NULL OR salary_max <= ${salary_max_filter}::numeric) \r\nGROUP BY 1 ORDER BY 2 DESC LIMIT 20;",
+                        "sql": {
+                          "columns": [
+                            {
+                              "parameters": [],
+                              "type": "function"
+                            }
+                          ],
+                          "groupBy": [
+                            {
+                              "property": {
+                                "type": "string"
+                              },
+                              "type": "groupBy"
+                            }
+                          ],
+                          "limit": 50
+                        }
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "barchart",
+            "version": "13.1.0",
+            "spec": {
+              "options": {
+                "barRadius": 0.1,
+                "barWidth": 0.97,
+                "fullHighlight": false,
+                "groupWidth": 0.7,
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "overflow": "ellipsis",
+                  "placement": "right",
+                  "showLegend": true
+                },
+                "orientation": "vertical",
+                "showValue": "never",
+                "stacking": "none",
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "single",
+                  "sort": "none"
+                },
+                "xTickLabelRotation": -30,
+                "xTickLabelSpacing": 0
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      },
+                      {
+                        "value": 80,
+                        "color": "red"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "fillOpacity": 80,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "lineWidth": 1,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "off"
+                    }
+                  }
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "jobs"
+                    },
+                    "properties": [
+                      {
+                        "id": "color",
+                        "value": {
+                          "fixedColor": "dark-green",
+                          "mode": "fixed"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "panel-3": {
+        "kind": "Panel",
+        "spec": {
+          "id": 3,
+          "title": "Avg Min Salary",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-postgresql-datasource",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "afscz4el7e8zkf"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "format": "table",
+                        "rawQuery": true,
+                        "rawSql": "SELECT ROUND(AVG(salary_min)) AS avg_min_salary \r\nFROM adzuna_jobs \r\nWHERE salary_min IS NOT NULL AND salary_min > 0 \r\n  AND category_label IN (${category:sqlstring}) \r\n  AND COALESCE(contract_type, 'Not specified') IN (${contract_type:sqlstring}) \r\n  AND COALESCE(contract_time, 'Not specified') IN (${contract_time:sqlstring}) \r\n  AND location_display IN (${location:sqlstring}) \r\n  AND COALESCE(company_name, 'Not specified') IN (${company:sqlstring}) \r\n  AND salary_min >= ${salary_min_filter}::numeric \r\n  AND salary_max <= ${salary_max_filter}::numeric;",
+                        "sql": {
+                          "columns": [
+                            {
+                              "parameters": [],
+                              "type": "function"
+                            }
+                          ],
+                          "groupBy": [
+                            {
+                              "property": {
+                                "type": "string"
+                              },
+                              "type": "groupBy"
+                            }
+                          ],
+                          "limit": 50
+                        }
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "stat",
+            "version": "13.1.0",
+            "spec": {
+              "options": {
+                "colorMode": "background",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "percentChangeColorMode": "standard",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "showPercentChange": false,
+                "textMode": "auto",
+                "wideLayout": true
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "currencyGBP",
+                  "decimals": 0,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "fixed",
+                    "fixedColor": "green"
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-31": {
+        "kind": "Panel",
+        "spec": {
+          "id": 31,
+          "title": "Salary Distribution (Min Salary)",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-postgresql-datasource",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "afscz4el7e8zkf"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "format": "table",
+                        "rawQuery": true,
+                        "rawSql": "SELECT salary_min \r\nFROM adzuna_jobs \r\nWHERE salary_min IS NOT NULL AND salary_min > 0 AND salary_min < 300000 \r\n  AND category_label IN (${category:sqlstring}) \r\n  AND COALESCE(contract_type, 'Not specified') IN (${contract_type:sqlstring}) \r\n  AND COALESCE(contract_time, 'Not specified') IN (${contract_time:sqlstring}) \r\n  AND location_display IN (${location:sqlstring}) \r\n  AND COALESCE(company_name, 'Not specified') IN (${company:sqlstring}) \r\n  AND salary_min >= ${salary_min_filter}::numeric \r\n  AND salary_max <= ${salary_max_filter}::numeric;",
+                        "sql": {
+                          "columns": [
+                            {
+                              "parameters": [],
+                              "type": "function"
+                            }
+                          ],
+                          "groupBy": [
+                            {
+                              "property": {
+                                "type": "string"
+                              },
+                              "type": "groupBy"
+                            }
+                          ],
+                          "limit": 50
+                        }
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "histogram",
+            "version": "13.1.0",
+            "spec": {
+              "options": {
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "overflow": "ellipsis",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "single",
+                  "sort": "none"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "currencyGBP",
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      },
+                      {
+                        "value": 80,
+                        "color": "red"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "fillOpacity": 80,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "lineWidth": 2,
+                    "stacking": {
+                      "group": "A",
+                      "mode": "none"
+                    }
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-32": {
+        "kind": "Panel",
+        "spec": {
+          "id": 32,
+          "title": "Avg Salary Range by Category (Top 15)",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-postgresql-datasource",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "afscz4el7e8zkf"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "format": "table",
+                        "rawQuery": true,
+                        "rawSql": "SELECT category_label AS category, ROUND(AVG(salary_min)) AS avg_min_salary, ROUND(AVG(salary_max)) AS avg_max_salary \r\nFROM adzuna_jobs \r\nWHERE salary_min IS NOT NULL AND salary_min > 0 \r\n  AND salary_max IS NOT NULL AND salary_max > 0 \r\n  AND category_label IS NOT NULL \r\n  AND category_label IN (${category:sqlstring}) \r\n  AND COALESCE(contract_type, 'Not specified') IN (${contract_type:sqlstring}) \r\n  AND COALESCE(contract_time, 'Not specified') IN (${contract_time:sqlstring}) \r\n  AND location_display IN (${location:sqlstring}) \r\n  AND COALESCE(company_name, 'Not specified') IN (${company:sqlstring}) \r\n  AND salary_min >= ${salary_min_filter}::numeric \r\n  AND salary_max <= ${salary_max_filter}::numeric \r\nGROUP BY 1 ORDER BY avg_max_salary DESC LIMIT 15;",
+                        "sql": {
+                          "columns": [
+                            {
+                              "parameters": [],
+                              "type": "function"
+                            }
+                          ],
+                          "groupBy": [
+                            {
+                              "property": {
+                                "type": "string"
+                              },
+                              "type": "groupBy"
+                            }
+                          ],
+                          "limit": 50
+                        }
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "barchart",
+            "version": "13.1.0",
+            "spec": {
+              "options": {
+                "barRadius": 0.5,
+                "barWidth": 0.91,
+                "fullHighlight": false,
+                "groupWidth": 0.71,
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "overflow": "ellipsis",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "orientation": "horizontal",
+                "showValue": "auto",
+                "stacking": "none",
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "multi",
+                  "sort": "none"
+                },
+                "xField": "time",
+                "xTickLabelRotation": 0,
+                "xTickLabelSpacing": 100
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "currencyGBP",
+                  "decimals": 0,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "semi-dark-orange"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "fillOpacity": 100,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "lineWidth": 0,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "off"
+                    }
+                  }
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "avg_min_salary"
+                    },
+                    "properties": [
+                      {
+                        "id": "color",
+                        "value": {
+                          "fixedColor": "orange",
+                          "mode": "fixed"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "avg_max_salary"
+                    },
+                    "properties": [
+                      {
+                        "id": "color",
+                        "value": {
+                          "fixedColor": "green",
+                          "mode": "fixed"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "panel-4": {
+        "kind": "Panel",
+        "spec": {
+          "id": 4,
+          "title": "Avg Max Salary",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-postgresql-datasource",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "afscz4el7e8zkf"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "format": "table",
+                        "rawQuery": true,
+                        "rawSql": "SELECT ROUND(AVG(salary_max)) AS avg_max_salary \r\nFROM adzuna_jobs \r\nWHERE salary_max IS NOT NULL AND salary_max > 0 \r\n  AND category_label IN (${category:sqlstring}) \r\n  AND COALESCE(contract_type, 'Not specified') IN (${contract_type:sqlstring}) \r\n  AND COALESCE(contract_time, 'Not specified') IN (${contract_time:sqlstring}) \r\n  AND location_display IN (${location:sqlstring}) \r\n  AND COALESCE(company_name, 'Not specified') IN (${company:sqlstring}) \r\n  AND salary_min >= ${salary_min_filter}::numeric \r\n  AND salary_max <= ${salary_max_filter}::numeric;",
+                        "sql": {
+                          "columns": [
+                            {
+                              "parameters": [],
+                              "type": "function"
+                            }
+                          ],
+                          "groupBy": [
+                            {
+                              "property": {
+                                "type": "string"
+                              },
+                              "type": "groupBy"
+                            }
+                          ],
+                          "limit": 50
+                        }
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "stat",
+            "version": "13.1.0",
+            "spec": {
+              "options": {
+                "colorMode": "background",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "percentChangeColorMode": "standard",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "showPercentChange": false,
+                "textMode": "auto",
+                "wideLayout": true
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "currencyGBP",
+                  "decimals": 0,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "fixed",
+                    "fixedColor": "green"
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-41": {
+        "kind": "Panel",
+        "spec": {
+          "id": 41,
+          "title": "Job Locations Map",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-postgresql-datasource",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "afscz4el7e8zkf"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "format": "table",
+                        "rawQuery": true,
+                        "rawSql": "SELECT ROUND(latitude::numeric, 2) AS latitude, ROUND(longitude::numeric, 2) AS longitude, COUNT(*) AS job_count, ROUND(AVG(COALESCE(salary_min, 0))) AS avg_salary \r\nFROM adzuna_jobs \r\nWHERE latitude IS NOT NULL AND longitude IS NOT NULL AND latitude != 0 AND longitude != 0 \r\n  AND category_label IN (${category:sqlstring}) \r\n  AND COALESCE(contract_type, 'Not specified') IN (${contract_type:sqlstring}) \r\n  AND COALESCE(contract_time, 'Not specified') IN (${contract_time:sqlstring}) \r\n  AND location_display IN (${location:sqlstring}) \r\n  AND COALESCE(company_name, 'Not specified') IN (${company:sqlstring}) \r\n  AND (salary_min IS NULL OR salary_min >= ${salary_min_filter}::numeric) \r\n  AND (salary_max IS NULL OR salary_max <= ${salary_max_filter}::numeric) \r\nGROUP BY 1, 2;",
+                        "sql": {
+                          "columns": [
+                            {
+                              "parameters": [],
+                              "type": "function"
+                            }
+                          ],
+                          "groupBy": [
+                            {
+                              "property": {
+                                "type": "string"
+                              },
+                              "type": "groupBy"
+                            }
+                          ],
+                          "limit": 50
+                        }
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "geomap",
+            "version": "13.1.0",
+            "spec": {
+              "options": {
+                "basemap": {
+                  "config": {},
+                  "name": "Layer 0",
+                  "noRepeat": false,
+                  "type": "default"
+                },
+                "controls": {
+                  "mouseWheelZoom": true,
+                  "showAttribution": true,
+                  "showDebug": false,
+                  "showMeasure": false,
+                  "showScale": false,
+                  "showZoom": true
+                },
+                "layers": [
+                  {
+                    "config": {
+                      "showLegend": true,
+                      "style": {
+                        "color": {
+                          "field": "job_count",
+                          "fixed": "dark-green"
+                        },
+                        "opacity": 0.7,
+                        "rotation": {
+                          "fixed": 0,
+                          "max": 360,
+                          "min": -360,
+                          "mode": "mod"
+                        },
+                        "size": {
+                          "fixed": 5,
+                          "max": 15,
+                          "min": 2
+                        },
+                        "symbol": {
+                          "fixed": "img/icons/marker/circle.svg",
+                          "mode": "fixed"
+                        },
+                        "symbolAlign": {
+                          "horizontal": "center",
+                          "vertical": "center"
+                        },
+                        "textConfig": {
+                          "fontSize": 12,
+                          "offsetX": 0,
+                          "offsetY": 0,
+                          "textAlign": "center",
+                          "textBaseline": "middle"
+                        }
+                      }
+                    },
+                    "location": {
+                      "mode": "auto"
+                    },
+                    "name": "Layer 1",
+                    "tooltip": true,
+                    "type": "markers"
+                  }
+                ],
+                "tooltip": {
+                  "mode": "details"
+                },
+                "view": {
+                  "allLayers": true,
+                  "dashboardVariable": false,
+                  "id": "fit",
+                  "lat": 46,
+                  "lon": 14,
+                  "noRepeat": false,
+                  "padding": 6,
+                  "zoom": 15
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      },
+                      {
+                        "value": 80,
+                        "color": "red"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "custom": {
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    }
+                  }
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "avg_salary"
+                    },
+                    "properties": [
+                      {
+                        "id": "unit",
+                        "value": "currencyGBP"
+                      },
+                      {
+                        "id": "decimals",
+                        "value": 0
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "panel-42": {
+        "kind": "Panel",
+        "spec": {
+          "id": 42,
+          "title": "Top 15 Locations by Job Count",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-postgresql-datasource",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "afscz4el7e8zkf"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "format": "table",
+                        "rawQuery": true,
+                        "rawSql": "SELECT location_display AS location, COUNT(*) AS jobs \r\nFROM adzuna_jobs \r\nWHERE location_display IS NOT NULL \r\n  AND category_label IN (${category:sqlstring}) \r\n  AND COALESCE(contract_type, 'Not specified') IN (${contract_type:sqlstring}) \r\n  AND COALESCE(contract_time, 'Not specified') IN (${contract_time:sqlstring}) \r\n  AND location_display IN (${location:sqlstring}) \r\n  AND COALESCE(company_name, 'Not specified') IN (${company:sqlstring}) \r\n  AND (salary_min IS NULL OR salary_min >= ${salary_min_filter}::numeric) \r\n  AND (salary_max IS NULL OR salary_max <= ${salary_max_filter}::numeric) \r\nGROUP BY 1 ORDER BY 2 DESC LIMIT 15;",
+                        "sql": {
+                          "columns": [
+                            {
+                              "parameters": [],
+                              "type": "function"
+                            }
+                          ],
+                          "groupBy": [
+                            {
+                              "property": {
+                                "type": "string"
+                              },
+                              "type": "groupBy"
+                            }
+                          ],
+                          "limit": 50
+                        }
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "barchart",
+            "version": "13.1.0",
+            "spec": {
+              "options": {
+                "barRadius": 0,
+                "barWidth": 0.97,
+                "fullHighlight": false,
+                "groupWidth": 0.7,
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "overflow": "ellipsis",
+                  "placement": "right",
+                  "showLegend": true
+                },
+                "orientation": "horizontal",
+                "showValue": "never",
+                "stacking": "none",
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "single",
+                  "sort": "none"
+                },
+                "xTickLabelRotation": 0,
+                "xTickLabelSpacing": 0
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "fillOpacity": 80,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "lineWidth": 1,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "off"
+                    }
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-5": {
+        "kind": "Panel",
+        "spec": {
+          "id": 5,
+          "title": "Unique Companies",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-postgresql-datasource",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "afscz4el7e8zkf"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "format": "table",
+                        "rawQuery": true,
+                        "rawSql": "SELECT COUNT(DISTINCT company_name) AS unique_companies \r\nFROM adzuna_jobs \r\nWHERE company_name IS NOT NULL \r\n  AND category_label IN (${category:sqlstring}) \r\n  AND COALESCE(contract_type, 'Not specified') IN (${contract_type:sqlstring}) \r\n  AND COALESCE(contract_time, 'Not specified') IN (${contract_time:sqlstring}) \r\n  AND location_display IN (${location:sqlstring}) \r\n  AND COALESCE(company_name, 'Not specified') IN (${company:sqlstring}) \r\n  AND (salary_min IS NULL OR salary_min >= ${salary_min_filter}::numeric) \r\n  AND (salary_max IS NULL OR salary_max <= ${salary_max_filter}::numeric);",
+                        "sql": {
+                          "columns": [
+                            {
+                              "parameters": [],
+                              "type": "function"
+                            }
+                          ],
+                          "groupBy": [
+                            {
+                              "property": {
+                                "type": "string"
+                              },
+                              "type": "groupBy"
+                            }
+                          ],
+                          "limit": 50
+                        }
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "stat",
+            "version": "13.1.0",
+            "spec": {
+              "options": {
+                "colorMode": "background",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "percentChangeColorMode": "standard",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "showPercentChange": false,
+                "textMode": "auto",
+                "wideLayout": true
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "purple"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "fixed",
+                    "fixedColor": "purple"
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-52": {
+        "kind": "Panel",
+        "spec": {
+          "id": 52,
+          "title": "Predicted vs Actual Salary Split",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-postgresql-datasource",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "afscz4el7e8zkf"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "format": "table",
+                        "rawQuery": true,
+                        "rawSql": "SELECT CASE WHEN salary_is_predicted = true THEN 'Predicted' ELSE 'Actual' END AS salary_type, COUNT(*) AS count \r\nFROM adzuna_jobs \r\nWHERE category_label IN (${category:sqlstring}) \r\n  AND COALESCE(contract_type, 'Not specified') IN (${contract_type:sqlstring}) \r\n  AND COALESCE(contract_time, 'Not specified') IN (${contract_time:sqlstring}) \r\n  AND location_display IN (${location:sqlstring}) \r\n  AND COALESCE(company_name, 'Not specified') IN (${company:sqlstring}) \r\nGROUP BY 1;",
+                        "sql": {
+                          "columns": [
+                            {
+                              "parameters": [],
+                              "type": "function"
+                            }
+                          ],
+                          "groupBy": [
+                            {
+                              "property": {
+                                "type": "string"
+                              },
+                              "type": "groupBy"
+                            }
+                          ],
+                          "limit": 50
+                        }
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "piechart",
+            "version": "13.1.0",
+            "spec": {
+              "options": {
+                "displayLabels": [
+                  "percent"
+                ],
+                "legend": {
+                  "displayMode": "list",
+                  "overflow": "ellipsis",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "pieType": "pie",
+                "reduceOptions": {
+                  "calcs": [],
+                  "fields": "",
+                  "values": true
+                },
+                "sort": "desc",
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "single",
+                  "sort": "none"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "palette-classic",
+                    "fixedColor": "#73BF69"
+                  },
+                  "custom": {
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    }
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-53": {
+        "kind": "Panel",
+        "spec": {
+          "id": 53,
+          "title": "Jobs by Category Over Time",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-postgresql-datasource",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "afscz4el7e8zkf"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "format": "time_series",
+                        "rawQuery": true,
+                        "rawSql": "SELECT DATE_TRUNC('day', inserted_at) AS time, category_label AS metric, COUNT(*) AS value \r\nFROM adzuna_jobs \r\nWHERE inserted_at IS NOT NULL \r\n  AND category_label IS NOT NULL \r\n  AND category_label IN (${category:sqlstring}) \r\n  AND COALESCE(contract_type, 'Not specified') IN (${contract_type:sqlstring}) \r\n  AND COALESCE(contract_time, 'Not specified') IN (${contract_time:sqlstring}) \r\n  AND location_display IN (${location:sqlstring}) \r\n  AND COALESCE(company_name, 'Not specified') IN (${company:sqlstring}) \r\n  AND (salary_min IS NULL OR salary_min >= ${salary_min_filter}::numeric) \r\n  AND (salary_max IS NULL OR salary_max <= ${salary_max_filter}::numeric) \r\n  AND $__timeFilter(inserted_at) \r\nGROUP BY 1, 2 ORDER BY 1;",
+                        "sql": {
+                          "columns": [
+                            {
+                              "parameters": [],
+                              "type": "function"
+                            }
+                          ],
+                          "groupBy": [
+                            {
+                              "property": {
+                                "type": "string"
+                              },
+                              "type": "groupBy"
+                            }
+                          ],
+                          "limit": 50
+                        }
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "timeseries",
+            "version": "13.1.0",
+            "spec": {
+              "options": {
+                "annotations": {
+                  "clustering": -1,
+                  "multiLane": false
+                },
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "enableFacetedFilter": false,
+                  "overflow": "ellipsis",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "multi",
+                  "sort": "none"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      },
+                      {
+                        "value": 80,
+                        "color": "red"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "barWidthFactor": 0.6,
+                    "drawStyle": "line",
+                    "fillOpacity": 20,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "insertNulls": false,
+                    "lineInterpolation": "linear",
+                    "lineWidth": 1,
+                    "pointSize": 5,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "showPoints": "auto",
+                    "showValues": false,
+                    "spanNulls": true,
+                    "stacking": {
+                      "group": "A",
+                      "mode": "normal"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "off"
+                    }
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-6": {
+        "kind": "Panel",
+        "spec": {
+          "id": 6,
+          "title": "Categories",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-postgresql-datasource",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "afscz4el7e8zkf"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "format": "table",
+                        "rawQuery": true,
+                        "rawSql": "SELECT COUNT(DISTINCT category_label) AS categories \r\nFROM adzuna_jobs \r\nWHERE category_label IS NOT NULL \r\n  AND category_label IN (${category:sqlstring}) \r\n  AND COALESCE(contract_type, 'Not specified') IN (${contract_type:sqlstring}) \r\n  AND COALESCE(contract_time, 'Not specified') IN (${contract_time:sqlstring}) \r\n  AND location_display IN (${location:sqlstring}) \r\n  AND COALESCE(company_name, 'Not specified') IN (${company:sqlstring});",
+                        "sql": {
+                          "columns": [
+                            {
+                              "parameters": [],
+                              "type": "function"
+                            }
+                          ],
+                          "groupBy": [
+                            {
+                              "property": {
+                                "type": "string"
+                              },
+                              "type": "groupBy"
+                            }
+                          ],
+                          "limit": 50
+                        }
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "stat",
+            "version": "13.1.0",
+            "spec": {
+              "options": {
+                "colorMode": "background",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "percentChangeColorMode": "standard",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "showPercentChange": false,
+                "textMode": "auto",
+                "wideLayout": true
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "orange"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "thresholds",
+                    "fixedColor": "#ad46ff"
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-61": {
+        "kind": "Panel",
+        "spec": {
+          "id": 61,
+          "title": "Job Listings Detail",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-postgresql-datasource",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "afscz4el7e8zkf"
+                      },
+                      "spec": {
+                        "format": "table",
+                        "rawSql": "SELECT title, company_name, category_label, salary_min, salary_max, CASE WHEN salary_is_predicted THEN 'Predicted' ELSE 'Actual' END AS salary_type, contract_type, contract_time, location_display, location_area, inserted_at, redirect_url FROM adzuna_jobs WHERE category_label IN (${category:sqlstring}) AND contract_type IN (${contract_type:sqlstring}) AND contract_time IN (${contract_time:sqlstring}) AND location_display IN (${location:sqlstring}) AND company_name IN (${company:sqlstring}) AND COALESCE(salary_min, 0) >= ${salary_min_filter}::numeric AND COALESCE(salary_max, 999999999) <= ${salary_max_filter}::numeric ORDER BY inserted_at DESC LIMIT 500;"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "table",
+            "version": "13.1.0",
+            "spec": {
+              "options": {
+                "cellHeight": "sm",
+                "showHeader": true,
+                "sortBy": [
+                  {
+                    "desc": true,
+                    "displayName": "inserted_at"
+                  }
+                ]
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      },
+                      {
+                        "value": 80,
+                        "color": "red"
+                      }
+                    ]
+                  },
+                  "custom": {
+                    "align": "auto",
+                    "cellOptions": {
+                      "type": "auto"
+                    },
+                    "filterable": true,
+                    "footer": {
+                      "reducers": [
+                        "countAll"
+                      ]
+                    },
+                    "inspect": false
+                  }
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "salary_min"
+                    },
+                    "properties": [
+                      {
+                        "id": "unit",
+                        "value": "currencyGBP"
+                      },
+                      {
+                        "id": "decimals",
+                        "value": 0
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "salary_max"
+                    },
+                    "properties": [
+                      {
+                        "id": "unit",
+                        "value": "currencyGBP"
+                      },
+                      {
+                        "id": "decimals",
+                        "value": 0
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "redirect_url"
+                    },
+                    "properties": [
+                      {
+                        "id": "links",
+                        "value": [
+                          {
+                            "targetBlank": true,
+                            "title": "View Job",
+                            "url": "${__data.fields.redirect_url}"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "panel-7": {
+        "kind": "Panel",
+        "spec": {
+          "id": 7,
+          "title": "% Predicted Salaries",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-postgresql-datasource",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "afscz4el7e8zkf"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "format": "table",
+                        "rawQuery": true,
+                        "rawSql": "SELECT ROUND(100.0 * SUM(CASE WHEN salary_is_predicted = true THEN 1 ELSE 0 END) / NULLIF(COUNT(*), 0), 1) AS pct_predicted \r\nFROM adzuna_jobs \r\nWHERE category_label IN (${category:sqlstring}) \r\n  AND COALESCE(contract_type, 'Not specified') IN (${contract_type:sqlstring}) \r\n  AND COALESCE(contract_time, 'Not specified') IN (${contract_time:sqlstring}) \r\n  AND location_display IN (${location:sqlstring}) \r\n  AND COALESCE(company_name, 'Not specified') IN (${company:sqlstring});",
+                        "sql": {
+                          "columns": [
+                            {
+                              "parameters": [],
+                              "type": "function"
+                            }
+                          ],
+                          "groupBy": [
+                            {
+                              "property": {
+                                "type": "string"
+                              },
+                              "type": "groupBy"
+                            }
+                          ],
+                          "limit": 50
+                        }
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "stat",
+            "version": "13.1.0",
+            "spec": {
+              "options": {
+                "colorMode": "background",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "percentChangeColorMode": "standard",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "showPercentChange": false,
+                "textMode": "auto",
+                "wideLayout": true
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "percent",
+                  "decimals": 1,
+                  "min": 0,
+                  "max": 100,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "yellow"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "fixed",
+                    "fixedColor": "yellow"
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      }
+    },
+    "layout": {
+      "kind": "RowsLayout",
+      "spec": {
+        "rows": [
+          {
+            "kind": "RowsLayoutRow",
+            "spec": {
+              "title": "",
+              "collapse": false,
+              "layout": {
+                "kind": "GridLayout",
+                "spec": {
+                  "items": [
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 0,
+                        "y": 0,
+                        "width": 4,
+                        "height": 4,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-2"
+                        }
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 4,
+                        "y": 0,
+                        "width": 4,
+                        "height": 4,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-3"
+                        }
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 8,
+                        "y": 0,
+                        "width": 4,
+                        "height": 4,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-4"
+                        }
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 12,
+                        "y": 0,
+                        "width": 4,
+                        "height": 4,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-5"
+                        }
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 16,
+                        "y": 0,
+                        "width": 4,
+                        "height": 4,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-6"
+                        }
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 20,
+                        "y": 0,
+                        "width": 4,
+                        "height": 4,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-7"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "kind": "RowsLayoutRow",
+            "spec": {
+              "title": "Trends",
+              "collapse": false,
+              "layout": {
+                "kind": "GridLayout",
+                "spec": {
+                  "items": [
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 0,
+                        "y": 0,
+                        "width": 16,
+                        "height": 8,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-11"
+                        }
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 16,
+                        "y": 0,
+                        "width": 8,
+                        "height": 8,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-12"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "kind": "RowsLayoutRow",
+            "spec": {
+              "title": "Categories & Companies",
+              "collapse": false,
+              "layout": {
+                "kind": "GridLayout",
+                "spec": {
+                  "items": [
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 0,
+                        "y": 0,
+                        "width": 12,
+                        "height": 9,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-21"
+                        }
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 12,
+                        "y": 0,
+                        "width": 12,
+                        "height": 9,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-22"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "kind": "RowsLayoutRow",
+            "spec": {
+              "title": "Salaries",
+              "collapse": false,
+              "layout": {
+                "kind": "GridLayout",
+                "spec": {
+                  "items": [
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 0,
+                        "y": 0,
+                        "width": 12,
+                        "height": 8,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-31"
+                        }
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 12,
+                        "y": 0,
+                        "width": 12,
+                        "height": 8,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-32"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "kind": "RowsLayoutRow",
+            "spec": {
+              "title": "Geography & ",
+              "collapse": false,
+              "layout": {
+                "kind": "GridLayout",
+                "spec": {
+                  "items": [
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 0,
+                        "y": 0,
+                        "width": 8,
+                        "height": 20,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-41"
+                        }
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 8,
+                        "y": 0,
+                        "width": 16,
+                        "height": 12,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-42"
+                        }
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 8,
+                        "y": 12,
+                        "width": 8,
+                        "height": 8,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-52"
+                        }
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 16,
+                        "y": 12,
+                        "width": 8,
+                        "height": 8,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-53"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "kind": "RowsLayoutRow",
+            "spec": {
+              "title": "Drill-Down Table",
+              "collapse": false,
+              "layout": {
+                "kind": "GridLayout",
+                "spec": {
+                  "items": [
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 0,
+                        "y": 0,
+                        "width": 24,
+                        "height": 10,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-61"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "links": [],
+    "liveNow": false,
+    "preload": false,
+    "tags": [
+      "jobs",
+      "adzuna",
+      "recruitment"
+    ],
+    "timeSettings": {
+      "timezone": "browser",
+      "from": "now-7d",
+      "to": "now",
+      "autoRefresh": "2h",
+      "autoRefreshIntervals": [
+        "5s",
+        "10s",
+        "30s",
+        "1m",
+        "5m",
+        "15m",
+        "30m",
+        "1h",
+        "2h",
+        "1d"
+      ],
+      "hideTimepicker": false,
+      "fiscalYearStartMonth": 0
+    },
+    "title": "Adzuna Jobs Dashboard 1",
+    "variables": [
+      {
+        "kind": "QueryVariable",
+        "spec": {
+          "name": "category",
+          "current": {
+            "text": "All",
+            "value": "$__all"
+          },
+          "label": "Category",
+          "hide": "dontHide",
+          "refresh": "onDashboardLoad",
+          "skipUrlSync": false,
+          "query": {
+            "kind": "DataQuery",
+            "group": "grafana-postgresql-datasource",
+            "version": "v0",
+            "datasource": {
+              "name": "afscz4el7e8zkf"
+            },
+            "spec": {
+              "__legacyStringValue": "SELECT DISTINCT category_label FROM adzuna_jobs WHERE category_label IS NOT NULL ORDER BY 1;"
+            }
+          },
+          "regex": "",
+          "regexApplyTo": "value",
+          "sort": "disabled",
+          "options": [],
+          "multi": true,
+          "includeAll": true,
+          "allowCustomValue": true
+        }
+      },
+      {
+        "kind": "QueryVariable",
+        "spec": {
+          "name": "contract_type",
+          "current": {
+            "text": "All",
+            "value": "$__all"
+          },
+          "label": "Contract Type",
+          "hide": "dontHide",
+          "refresh": "onDashboardLoad",
+          "skipUrlSync": false,
+          "query": {
+            "kind": "DataQuery",
+            "group": "grafana-postgresql-datasource",
+            "version": "v0",
+            "datasource": {
+              "name": "afscz4el7e8zkf"
+            },
+            "spec": {
+              "editorMode": "code",
+              "format": "table",
+              "query": "SELECT COALESCE(contract_type, 'Not specified') FROM adzuna_jobs GROUP BY 1 ORDER BY 1;",
+              "rawQuery": true,
+              "rawSql": "SELECT COALESCE(contract_type, 'Not specified') FROM adzuna_jobs GROUP BY 1 ORDER BY 1;",
+              "refId": "SQLVariableQueryEditor-VariableQuery",
+              "sql": {
+                "columns": [
+                  {
+                    "parameters": [],
+                    "type": "function"
+                  }
+                ],
+                "groupBy": [
+                  {
+                    "property": {
+                      "type": "string"
+                    },
+                    "type": "groupBy"
+                  }
+                ],
+                "limit": 50
+              }
+            }
+          },
+          "regex": "",
+          "regexApplyTo": "value",
+          "sort": "disabled",
+          "definition": "SELECT COALESCE(contract_type, 'Not specified') FROM adzuna_jobs GROUP BY 1 ORDER BY 1;",
+          "options": [],
+          "multi": true,
+          "includeAll": true,
+          "allowCustomValue": true
+        }
+      },
+      {
+        "kind": "QueryVariable",
+        "spec": {
+          "name": "contract_time",
+          "current": {
+            "text": "All",
+            "value": "$__all"
+          },
+          "label": "Contract Time",
+          "hide": "dontHide",
+          "refresh": "onDashboardLoad",
+          "skipUrlSync": false,
+          "query": {
+            "kind": "DataQuery",
+            "group": "grafana-postgresql-datasource",
+            "version": "v0",
+            "datasource": {
+              "name": "afscz4el7e8zkf"
+            },
+            "spec": {
+              "editorMode": "code",
+              "format": "table",
+              "query": "SELECT COALESCE(contract_time, 'Not specified') FROM adzuna_jobs GROUP BY 1 ORDER BY 1;",
+              "rawQuery": true,
+              "rawSql": "SELECT COALESCE(contract_time, 'Not specified') FROM adzuna_jobs GROUP BY 1 ORDER BY 1;",
+              "refId": "SQLVariableQueryEditor-VariableQuery",
+              "sql": {
+                "columns": [
+                  {
+                    "parameters": [],
+                    "type": "function"
+                  }
+                ],
+                "groupBy": [
+                  {
+                    "property": {
+                      "type": "string"
+                    },
+                    "type": "groupBy"
+                  }
+                ],
+                "limit": 50
+              }
+            }
+          },
+          "regex": "",
+          "regexApplyTo": "value",
+          "sort": "disabled",
+          "definition": "SELECT COALESCE(contract_time, 'Not specified') FROM adzuna_jobs GROUP BY 1 ORDER BY 1;",
+          "options": [],
+          "multi": true,
+          "includeAll": true,
+          "allowCustomValue": true
+        }
+      },
+      {
+        "kind": "QueryVariable",
+        "spec": {
+          "name": "location",
+          "current": {
+            "text": "All",
+            "value": "$__all"
+          },
+          "label": "Location",
+          "hide": "dontHide",
+          "refresh": "onDashboardLoad",
+          "skipUrlSync": false,
+          "query": {
+            "kind": "DataQuery",
+            "group": "grafana-postgresql-datasource",
+            "version": "v0",
+            "datasource": {
+              "name": "afscz4el7e8zkf"
+            },
+            "spec": {
+              "__legacyStringValue": "SELECT DISTINCT location_display FROM adzuna_jobs WHERE location_display IS NOT NULL ORDER BY 1;"
+            }
+          },
+          "regex": "",
+          "regexApplyTo": "value",
+          "sort": "disabled",
+          "options": [],
+          "multi": true,
+          "includeAll": true,
+          "allowCustomValue": true
+        }
+      },
+      {
+        "kind": "QueryVariable",
+        "spec": {
+          "name": "company",
+          "current": {
+            "text": "All",
+            "value": "$__all"
+          },
+          "label": "Company",
+          "hide": "dontHide",
+          "refresh": "onDashboardLoad",
+          "skipUrlSync": false,
+          "query": {
+            "kind": "DataQuery",
+            "group": "grafana-postgresql-datasource",
+            "version": "v0",
+            "datasource": {
+              "name": "afscz4el7e8zkf"
+            },
+            "spec": {
+              "editorMode": "code",
+              "format": "table",
+              "query": "SELECT COALESCE(company_name, 'Not specified') FROM adzuna_jobs GROUP BY 1 ORDER BY 1;",
+              "rawQuery": true,
+              "rawSql": "SELECT COALESCE(company_name, 'Not specified') FROM adzuna_jobs GROUP BY 1 ORDER BY 1;",
+              "refId": "SQLVariableQueryEditor-VariableQuery",
+              "sql": {
+                "columns": [
+                  {
+                    "parameters": [],
+                    "type": "function"
+                  }
+                ],
+                "groupBy": [
+                  {
+                    "property": {
+                      "type": "string"
+                    },
+                    "type": "groupBy"
+                  }
+                ],
+                "limit": 50
+              }
+            }
+          },
+          "regex": "",
+          "regexApplyTo": "value",
+          "sort": "disabled",
+          "definition": "SELECT COALESCE(company_name, 'Not specified') FROM adzuna_jobs GROUP BY 1 ORDER BY 1;",
+          "options": [],
+          "multi": true,
+          "includeAll": true,
+          "allowCustomValue": true
+        }
+      },
+      {
+        "kind": "TextVariable",
+        "spec": {
+          "name": "salary_min_filter",
+          "current": {
+            "text": "0",
+            "value": "0"
+          },
+          "query": "",
+          "label": "Min Salary ≥",
+          "hide": "dontHide",
+          "skipUrlSync": false
+        }
+      },
+      {
+        "kind": "TextVariable",
+        "spec": {
+          "name": "salary_max_filter",
+          "current": {
+            "text": "500000",
+            "value": "500000"
+          },
+          "query": "",
+          "label": "Max Salary ≤",
+          "hide": "dontHide",
+          "skipUrlSync": false
+        }
+      }
+    ]
+  }
+}
