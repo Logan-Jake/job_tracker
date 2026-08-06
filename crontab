@@ -1,0 +1,2 @@
+* */6 * * * cd /job_tracker/scraper && python build_daily_snapshot.py
+# runs every 6 hour, 4 times a day
