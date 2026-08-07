@@ -1,6 +1,7 @@
 services:
   job_tracker:
     build:
+      restart: unless-stopped
       context: .
       dockerfile: Dockerfile
     environment:
@@ -57,7 +58,7 @@ services:
       # GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER}
       # GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD}
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}" ]
+      test: [ "CMD-SHELL", "curl -f http://localhost:3000/api/health || exit 1" ]
       interval: 10s
       timeout: 5s
       retries: 5

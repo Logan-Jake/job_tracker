@@ -1,4 +1,0 @@
-
-0 4 * * * cd /home/jlogan/job_tracker/scraper && /home/jlogan/job_tracker/venv/bin/python3 build_daily_snapshot.py >> /tmp/etl.log 2>&1
-
-
